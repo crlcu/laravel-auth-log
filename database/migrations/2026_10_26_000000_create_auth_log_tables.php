@@ -24,7 +24,6 @@ return new class extends Migration
             $table->timestamp('verified_at')->nullable();
             $table->string('verification_code_hash', 64)->nullable();
             $table->timestamp('verification_sent_at')->nullable();
-            $table->unsignedTinyInteger('verification_attempts')->default(0);
             $table->timestamp('signed_out_at')->nullable();
             $table->timestamps();
 

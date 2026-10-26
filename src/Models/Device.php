@@ -28,7 +28,6 @@ use Kiddoflow\AuthLog\Database\Factories\DeviceFactory;
  * @property CarbonInterface $last_seen_at
  * @property CarbonInterface|null $verified_at
  * @property CarbonInterface|null $verification_sent_at
- * @property int $verification_attempts
  * @property CarbonInterface|null $signed_out_at
  */
 class Device extends Model
@@ -59,7 +58,6 @@ class Device extends Model
             'last_seen_at' => 'datetime',
             'verified_at' => 'datetime',
             'verification_sent_at' => 'datetime',
-            'verification_attempts' => 'integer',
             'signed_out_at' => 'datetime',
         ];
     }

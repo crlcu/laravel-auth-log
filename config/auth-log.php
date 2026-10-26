@@ -85,6 +85,9 @@ return [
     | the routes in `allowed_routes`, so the user can still enter the code or
     | sign out.
     |
+    | `max_attempts` wrong codes per user within `attempts_window_minutes`
+    | sign the device out; neither a new code nor a new sign-in resets them.
+    |
     */
 
     'verification' => [
@@ -92,6 +95,7 @@ return [
         'allowed_routes' => ['device-verification.*', 'logout'],
         'code_lifetime_minutes' => 15,
         'max_attempts' => 5,
+        'attempts_window_minutes' => 60,
         'resend_cooldown_seconds' => 60,
     ],
 

@@ -2,6 +2,7 @@
 
 namespace Kiddoflow\AuthLog;
 
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Cookie\CookieJar;
 use Illuminate\Database\Eloquent\Model;
@@ -287,41 +288,68 @@ class Tracker
     }
 
     /**
-     * Check a code typed on the device. Too many wrong codes sign the device out.
+     * Check a code typed on the device.
+     *
+     * Wrong codes are counted per user over a time window, from the history,
+     * and nothing resets the count: not a new code, not signing in again with
+     * the password, not a new device. Whoever stole the password therefore
+     * gets a handful of guesses an hour. Reaching the limit signs the device
+     * out. A lock per user keeps parallel requests from guessing past it.
      */
     public function verify(Model $user, Device $device, #[\SensitiveParameter] string $code): VerificationResult
     {
-        if (! $device->isAwaitingVerification()) {
-            return VerificationResult::Verified;
-        }
+        $lock = $this->container->make(CacheRepository::class)
+            ->lock('auth-log:verify:'.$user->getMorphClass().':'.$user->getKey(), 10);
 
-        if ($device->verificationCodeHasExpired()) {
-            return VerificationResult::Expired;
-        }
+        return $lock->block(5, function () use ($user, $device, $code) {
+            $device->refresh();
 
-        $device->increment('verification_attempts');
+            if (! $device->isAwaitingVerification()) {
+                return VerificationResult::Verified;
+            }
 
-        if (hash_equals((string) $device->verification_code_hash, $this->hashCode($code))) {
-            $device->forceFill([
-                'verified_at' => now(),
-                'verification_code_hash' => null,
-                'verification_attempts' => 0,
-            ])->save();
+            if ($this->hasTooManyWrongCodes($user)) {
+                $this->signOutDevice($user, $device);
 
-            $this->record(AuthEventType::Verified, $user, $device);
+                return VerificationResult::TooManyAttempts;
+            }
 
-            return VerificationResult::Verified;
-        }
+            if ($device->verificationCodeHasExpired()) {
+                return VerificationResult::Expired;
+            }
 
-        $this->record(AuthEventType::VerificationFailed, $user, $device);
+            if (hash_equals((string) $device->verification_code_hash, $this->hashCode($code))) {
+                $device->forceFill([
+                    'verified_at' => now(),
+                    'verification_code_hash' => null,
+                ])->save();
 
-        if ($device->verification_attempts >= (int) config('auth-log.verification.max_attempts')) {
-            $this->signOutDevice($user, $device);
+                $this->record(AuthEventType::Verified, $user, $device);
 
-            return VerificationResult::TooManyAttempts;
-        }
+                return VerificationResult::Verified;
+            }
 
-        return VerificationResult::Invalid;
+            $this->record(AuthEventType::VerificationFailed, $user, $device);
+
+            if ($this->hasTooManyWrongCodes($user)) {
+                $this->signOutDevice($user, $device);
+
+                return VerificationResult::TooManyAttempts;
+            }
+
+            return VerificationResult::Invalid;
+        });
+    }
+
+    private function hasTooManyWrongCodes(Model $user): bool
+    {
+        $wrongCodes = AuthEvent::query()
+            ->forAuthenticatable($user)
+            ->where('type', AuthEventType::VerificationFailed)
+            ->where('created_at', '>=', now()->subMinutes((int) config('auth-log.verification.attempts_window_minutes')))
+            ->count();
+
+        return $wrongCodes >= (int) config('auth-log.verification.max_attempts');
     }
 
     /**
@@ -395,7 +423,6 @@ class Tracker
             'verified_at' => null,
             'verification_code_hash' => $this->hashCode($code),
             'verification_sent_at' => now(),
-            'verification_attempts' => 0,
         ])->save();
 
         $this->record(AuthEventType::VerificationSent, $user, $device);
