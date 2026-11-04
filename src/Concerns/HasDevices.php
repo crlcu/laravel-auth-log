@@ -1,10 +1,10 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Concerns;
+namespace Crlcu\AuthLog\Concerns;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Kiddoflow\AuthLog\Models\AuthEvent;
-use Kiddoflow\AuthLog\Models\Device;
+use Crlcu\AuthLog\Models\AuthEvent;
+use Crlcu\AuthLog\Models\Device;
 
 /**
  * Tracks the devices and sign-in history of an authenticatable model.

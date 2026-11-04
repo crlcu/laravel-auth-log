@@ -1,8 +1,8 @@
 <?php
 
-use Kiddoflow\AuthLog\Location\CloudflareLocationResolver;
-use Kiddoflow\AuthLog\Suspicion\Rules\NewCountry;
-use Kiddoflow\AuthLog\Suspicion\Rules\TooManyFailedAttempts;
+use Crlcu\AuthLog\Location\CloudflareLocationResolver;
+use Crlcu\AuthLog\Suspicion\Rules\NewCountry;
+use Crlcu\AuthLog\Suspicion\Rules\TooManyFailedAttempts;
 
 return [
 

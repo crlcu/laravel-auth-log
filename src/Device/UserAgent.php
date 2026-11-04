@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Device;
+namespace Crlcu\AuthLog\Device;
 
 /**
  * Names the browser and platform in a User-Agent header, for people to

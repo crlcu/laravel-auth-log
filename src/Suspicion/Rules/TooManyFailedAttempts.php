@@ -1,12 +1,12 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Suspicion\Rules;
+namespace Crlcu\AuthLog\Suspicion\Rules;
 
 use Illuminate\Database\Eloquent\Model;
-use Kiddoflow\AuthLog\Enums\AuthEventType;
-use Kiddoflow\AuthLog\Location\Location;
-use Kiddoflow\AuthLog\Models\AuthEvent;
-use Kiddoflow\AuthLog\Suspicion\Rule;
+use Crlcu\AuthLog\Enums\AuthEventType;
+use Crlcu\AuthLog\Location\Location;
+use Crlcu\AuthLog\Models\AuthEvent;
+use Crlcu\AuthLog\Suspicion\Rule;
 
 /**
  * Someone got the password right after many wrong guesses on the account.

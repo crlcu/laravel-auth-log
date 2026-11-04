@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Listeners;
+namespace Crlcu\AuthLog\Listeners;
 
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Lockout;
@@ -8,8 +8,8 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Arr;
-use Kiddoflow\AuthLog\Enums\AuthEventType;
-use Kiddoflow\AuthLog\Tracker;
+use Crlcu\AuthLog\Enums\AuthEventType;
+use Crlcu\AuthLog\Tracker;
 
 /**
  * The sign-in events the guard does not see itself: wrong passwords,

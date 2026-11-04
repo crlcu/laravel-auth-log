@@ -1,12 +1,12 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Http\Middleware;
+namespace Crlcu\AuthLog\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Kiddoflow\AuthLog\AuthLog;
-use Kiddoflow\AuthLog\Tracker;
+use Crlcu\AuthLog\AuthLog;
+use Crlcu\AuthLog\Tracker;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

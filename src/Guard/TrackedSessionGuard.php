@@ -1,14 +1,14 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Guard;
+namespace Crlcu\AuthLog\Guard;
 
 use Illuminate\Auth\Recaller;
 use Illuminate\Auth\SessionGuard;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
-use Kiddoflow\AuthLog\Models\Device;
-use Kiddoflow\AuthLog\Tracker;
+use Crlcu\AuthLog\Models\Device;
+use Crlcu\AuthLog\Tracker;
 
 /**
  * Laravel's session guard, with every sign-in recorded against the device it
@@ -61,7 +61,7 @@ class TrackedSessionGuard extends SessionGuard
 
         $device = Tracker::tracks($user) ? $this->tracker()->findByRememberToken($user, $recaller->token()) : null;
 
-        // Users who signed up with Google or Yahoo have no password; their cookie
+        // Users who signed up through a social provider may have no password; their cookie
         // carries the hash of an empty one, which a password set later invalidates.
         if ($device === null || ! hash_equals($this->hashPasswordForCookie($user->getAuthPassword()), $recaller->hash())) {
             return null;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Location;
+namespace Crlcu\AuthLog\Location;
 
 use Illuminate\Http\Request;
 

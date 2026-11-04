@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiddoflow\AuthLog;
+namespace Crlcu\AuthLog;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;

@@ -1,14 +1,14 @@
 <?php
 
-namespace Kiddoflow\AuthLog;
+namespace Crlcu\AuthLog;
 
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Kiddoflow\AuthLog\Guard\TrackedSessionGuard;
-use Kiddoflow\AuthLog\Listeners\RecordAuthEvents;
-use Kiddoflow\AuthLog\Location\LocationResolver;
+use Crlcu\AuthLog\Guard\TrackedSessionGuard;
+use Crlcu\AuthLog\Listeners\RecordAuthEvents;
+use Crlcu\AuthLog\Location\LocationResolver;
 
 class AuthLogServiceProvider extends ServiceProvider
 {

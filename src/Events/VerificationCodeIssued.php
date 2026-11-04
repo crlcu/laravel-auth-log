@@ -1,10 +1,10 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Events;
+namespace Crlcu\AuthLog\Events;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
-use Kiddoflow\AuthLog\Models\Device;
+use Crlcu\AuthLog\Models\Device;
 
 /**
  * A device needs the code before it can be used. The app sends the code;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Models;
+namespace Crlcu\AuthLog\Models;
 
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Kiddoflow\AuthLog\Database\Factories\DeviceFactory;
+use Crlcu\AuthLog\Database\Factories\DeviceFactory;
 
 /**
  * One browser a user signed in from, told apart by the device cookie.

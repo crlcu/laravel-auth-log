@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiddoflow\AuthLog;
+namespace Crlcu\AuthLog;
 
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Container\Container;
@@ -9,18 +9,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 use Illuminate\Support\Str;
-use Kiddoflow\AuthLog\Concerns\HasDevices;
-use Kiddoflow\AuthLog\Device\UserAgent;
-use Kiddoflow\AuthLog\Enums\AuthEventType;
-use Kiddoflow\AuthLog\Enums\VerificationResult;
-use Kiddoflow\AuthLog\Events\NewDeviceSignedIn;
-use Kiddoflow\AuthLog\Events\VerificationCodeIssued;
-use Kiddoflow\AuthLog\Location\Location;
-use Kiddoflow\AuthLog\Location\LocationResolver;
-use Kiddoflow\AuthLog\Models\AuthEvent;
-use Kiddoflow\AuthLog\Models\Device;
-use Kiddoflow\AuthLog\Suspicion\Detector;
-use Kiddoflow\AuthLog\Suspicion\Rules\TooManyFailedAttempts;
+use Crlcu\AuthLog\Concerns\HasDevices;
+use Crlcu\AuthLog\Device\UserAgent;
+use Crlcu\AuthLog\Enums\AuthEventType;
+use Crlcu\AuthLog\Enums\VerificationResult;
+use Crlcu\AuthLog\Events\NewDeviceSignedIn;
+use Crlcu\AuthLog\Events\VerificationCodeIssued;
+use Crlcu\AuthLog\Location\Location;
+use Crlcu\AuthLog\Location\LocationResolver;
+use Crlcu\AuthLog\Models\AuthEvent;
+use Crlcu\AuthLog\Models\Device;
+use Crlcu\AuthLog\Suspicion\Detector;
+use Crlcu\AuthLog\Suspicion\Rules\TooManyFailedAttempts;
 
 /**
  * Records sign-ins against the device they come from and manages those

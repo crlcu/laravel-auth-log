@@ -1,11 +1,11 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Events;
+namespace Crlcu\AuthLog\Events;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
-use Kiddoflow\AuthLog\Models\AuthEvent;
-use Kiddoflow\AuthLog\Models\Device;
+use Crlcu\AuthLog\Models\AuthEvent;
+use Crlcu\AuthLog\Models\Device;
 
 /**
  * A user who already had a device signed in from one they never used before.

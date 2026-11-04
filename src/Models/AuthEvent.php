@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Models;
+namespace Crlcu\AuthLog\Models;
 
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Kiddoflow\AuthLog\Database\Factories\AuthEventFactory;
-use Kiddoflow\AuthLog\Enums\AuthEventType;
+use Crlcu\AuthLog\Database\Factories\AuthEventFactory;
+use Crlcu\AuthLog\Enums\AuthEventType;
 
 /**
  * One entry in the sign-in history. Failed sign-ins for an email address

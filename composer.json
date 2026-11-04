@@ -1,8 +1,7 @@
 {
-    "name": "kiddoflow/auth-log",
+    "name": "crlcu/laravel-auth-log",
     "description": "Login history, per-device sessions with real sign-out, new-device alerts and suspicious sign-in verification for Laravel.",
     "type": "library",
-    "version": "1.0.0",
     "license": "proprietary",
     "require": {
         "php": "^8.4",
@@ -13,14 +12,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Kiddoflow\\AuthLog\\": "src/",
-            "Kiddoflow\\AuthLog\\Database\\Factories\\": "database/factories/"
+            "Crlcu\\AuthLog\\": "src/",
+            "Crlcu\\AuthLog\\Database\\Factories\\": "database/factories/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Kiddoflow\\AuthLog\\AuthLogServiceProvider"
+                "Crlcu\\AuthLog\\AuthLogServiceProvider"
             ]
         }
     },

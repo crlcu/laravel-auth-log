@@ -1,10 +1,10 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Database\Factories;
+namespace Crlcu\AuthLog\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Kiddoflow\AuthLog\Enums\AuthEventType;
-use Kiddoflow\AuthLog\Models\AuthEvent;
+use Crlcu\AuthLog\Enums\AuthEventType;
+use Crlcu\AuthLog\Models\AuthEvent;
 
 /**
  * Attach an event to its user with ->for($user, 'authenticatable').

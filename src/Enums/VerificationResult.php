@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Enums;
+namespace Crlcu\AuthLog\Enums;
 
 enum VerificationResult
 {

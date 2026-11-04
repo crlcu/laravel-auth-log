@@ -1,10 +1,10 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Database\Factories;
+namespace Crlcu\AuthLog\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Kiddoflow\AuthLog\Models\Device;
+use Crlcu\AuthLog\Models\Device;
 
 /**
  * Attach a device to its owner with ->for($user, 'authenticatable').

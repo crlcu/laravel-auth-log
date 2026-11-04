@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Location;
+namespace Crlcu\AuthLog\Location;
 
 final readonly class Location
 {

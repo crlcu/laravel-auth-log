@@ -1,10 +1,10 @@
 <?php
 
-namespace Kiddoflow\AuthLog\Suspicion;
+namespace Crlcu\AuthLog\Suspicion;
 
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Model;
-use Kiddoflow\AuthLog\Location\Location;
+use Crlcu\AuthLog\Location\Location;
 
 class Detector
 {
