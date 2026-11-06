@@ -17,6 +17,8 @@ use Crlcu\AuthLog\Database\Factories\DeviceFactory;
  * A device is signed in until signed_out_at is set, and stays usable while
  * it holds a remember token or its session has not expired. A device with
  * no verified_at is waiting for the code emailed after a suspicious sign-in.
+ * A device with forgotten_at is left out of the accounts offered on the
+ * sign-in page, until it signs in again.
  *
  * @property string|null $session_id
  * @property string|null $browser
@@ -29,6 +31,7 @@ use Crlcu\AuthLog\Database\Factories\DeviceFactory;
  * @property CarbonInterface|null $verified_at
  * @property CarbonInterface|null $verification_sent_at
  * @property CarbonInterface|null $signed_out_at
+ * @property CarbonInterface|null $forgotten_at
  */
 class Device extends Model
 {
@@ -59,6 +62,7 @@ class Device extends Model
             'verified_at' => 'datetime',
             'verification_sent_at' => 'datetime',
             'signed_out_at' => 'datetime',
+            'forgotten_at' => 'datetime',
         ];
     }
 

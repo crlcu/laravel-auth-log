@@ -3,8 +3,10 @@
 namespace Crlcu\AuthLog;
 
 use Closure;
+use Crlcu\AuthLog\Http\Controllers\KnownAccountController;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /**
  * App-wide settings made once at boot, in a service provider. They hold no
@@ -52,5 +54,20 @@ final class AuthLog
     public static function skipsVerificationFor(Model $user): bool
     {
         return self::$skipVerificationUsing !== null && (self::$skipVerificationUsing)($user);
+    }
+
+    /**
+     * Register the routes the sign-in page's known accounts post to, to pick
+     * one (`known-accounts.store`), ask for the usual form to sign in to
+     * another (`known-accounts.another`) or forget one (`known-accounts.destroy`).
+     * Call it inside the app's `web` routes.
+     */
+    public static function knownAccountRoutes(string $prefix = 'login/known-accounts'): void
+    {
+        Route::middleware('guest')->prefix($prefix)->name('known-accounts.')->group(function () {
+            Route::post('/', [KnownAccountController::class, 'store'])->name('store');
+            Route::post('another', [KnownAccountController::class, 'another'])->name('another');
+            Route::delete('/', [KnownAccountController::class, 'destroy'])->name('destroy');
+        });
     }
 }

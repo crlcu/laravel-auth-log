@@ -4,6 +4,23 @@ use Crlcu\AuthLog\Location\CloudflareLocationResolver;
 use Crlcu\AuthLog\Suspicion\Rules\NewCountry;
 use Crlcu\AuthLog\Suspicion\Rules\TooManyFailedAttempts;
 
+/*
+|--------------------------------------------------------------------------
+| Environment
+|--------------------------------------------------------------------------
+|
+| These can be changed per environment without publishing this file:
+| AUTH_LOG_COOKIE, AUTH_LOG_COOKIE_LIFETIME (minutes), AUTH_LOG_RETENTION_DAYS,
+| AUTH_LOG_ACTIVITY_THROTTLE (minutes), AUTH_LOG_FAILED_ATTEMPTS_THRESHOLD,
+| AUTH_LOG_FAILED_ATTEMPTS_WINDOW (minutes), AUTH_LOG_KNOWN_COUNTRY_DAYS,
+| AUTH_LOG_CODE_LIFETIME (minutes), AUTH_LOG_CODE_MAX_ATTEMPTS,
+| AUTH_LOG_CODE_ATTEMPTS_WINDOW (minutes), AUTH_LOG_CODE_RESEND_COOLDOWN
+| (seconds) and AUTH_LOG_KNOWN_ACCOUNTS_LIMIT. Class names, routes, the
+| known accounts' model and username must match the app's code, so they
+| stay here.
+|
+*/
+
 return [
 
     /*
@@ -19,7 +36,7 @@ return [
 
     'cookie' => [
         'name' => env('AUTH_LOG_COOKIE', 'device_id'),
-        'lifetime_minutes' => 60 * 24 * 365 * 5,
+        'lifetime_minutes' => (int) env('AUTH_LOG_COOKIE_LIFETIME', 60 * 24 * 365 * 5),
     ],
 
     /*
@@ -32,7 +49,7 @@ return [
     |
     */
 
-    'retention_days' => 365,
+    'retention_days' => (int) env('AUTH_LOG_RETENTION_DAYS', 365),
 
     /*
     |--------------------------------------------------------------------------
@@ -44,7 +61,7 @@ return [
     |
     */
 
-    'activity_throttle_minutes' => 5,
+    'activity_throttle_minutes' => (int) env('AUTH_LOG_ACTIVITY_THROTTLE', 5),
 
     /*
     |--------------------------------------------------------------------------
@@ -71,9 +88,9 @@ return [
             NewCountry::class,
         ],
 
-        'failed_attempts_threshold' => 5,
-        'failed_attempts_window_minutes' => 60,
-        'known_country_days' => 90,
+        'failed_attempts_threshold' => (int) env('AUTH_LOG_FAILED_ATTEMPTS_THRESHOLD', 5),
+        'failed_attempts_window_minutes' => (int) env('AUTH_LOG_FAILED_ATTEMPTS_WINDOW', 60),
+        'known_country_days' => (int) env('AUTH_LOG_KNOWN_COUNTRY_DAYS', 90),
     ],
 
     /*
@@ -93,10 +110,10 @@ return [
     'verification' => [
         'route' => 'device-verification.show',
         'allowed_routes' => ['device-verification.*', 'logout'],
-        'code_lifetime_minutes' => 15,
-        'max_attempts' => 5,
-        'attempts_window_minutes' => 60,
-        'resend_cooldown_seconds' => 60,
+        'code_lifetime_minutes' => (int) env('AUTH_LOG_CODE_LIFETIME', 15),
+        'max_attempts' => (int) env('AUTH_LOG_CODE_MAX_ATTEMPTS', 5),
+        'attempts_window_minutes' => (int) env('AUTH_LOG_CODE_ATTEMPTS_WINDOW', 60),
+        'resend_cooldown_seconds' => (int) env('AUTH_LOG_CODE_RESEND_COOLDOWN', 60),
     ],
 
     /*
@@ -109,5 +126,26 @@ return [
     */
 
     'signed_out_route' => 'login',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Known accounts
+    |--------------------------------------------------------------------------
+    |
+    | The accounts that signed in on this browser, offered on the sign-in page
+    | so the user can pick one instead of typing the email. At most `limit`
+    | are listed, most recently used first. `model` keeps the list to one
+    | authenticatable model, e.g. App\Models\User::class; null lists any.
+    | `username` is the attribute shown masked and typed in the sign-in form.
+    | AuthLog::knownAccountRoutes() redirects back to `login_route`.
+    |
+    */
+
+    'known_accounts' => [
+        'limit' => (int) env('AUTH_LOG_KNOWN_ACCOUNTS_LIMIT', 5),
+        'model' => null,
+        'username' => 'email',
+        'login_route' => 'login',
+    ],
 
 ];

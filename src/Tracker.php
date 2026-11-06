@@ -5,6 +5,8 @@ namespace Crlcu\AuthLog;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Cookie\CookieJar;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
@@ -93,6 +95,7 @@ class Tracker
         $device ??= $this->newDevice($user, $deviceToken);
         $this->fillFromRequest($device, $request, $location);
         $device->signed_out_at = null;
+        $device->forgotten_at = null;
         $device->save();
 
         $this->session()->put(self::SESSION_KEY, $device->getKey());
@@ -241,6 +244,71 @@ class Tracker
             ->find($deviceId);
 
         return $device !== null && hash_equals($device->remember_token_hash, hash('sha256', $secret)) ? $device : null;
+    }
+
+    /**
+     * The accounts that signed in on this browser, most recently used first,
+     * for the sign-in page to offer instead of typing the email. Each device
+     * comes with its authenticatable loaded.
+     *
+     * Devices waiting for a code, signed out from elsewhere, locked after too
+     * many wrong codes or forgotten by the user are left out, as are accounts
+     * that no longer exist.
+     *
+     * @param  class-string<Model>|null  $type  only accounts of this model
+     * @return Collection<int, Device>
+     */
+    public function knownAccounts(?string $type = null): Collection
+    {
+        return $this->knownAccountsQuery($type)
+            ->with('authenticatable')
+            ->latest('last_seen_at')
+            ->limit((int) config('auth-log.known_accounts.limit'))
+            ->get()
+            ->filter(fn (Device $device) => $device->authenticatable !== null)
+            ->values();
+    }
+
+    /**
+     * One of the accounts known on this browser, by its device id.
+     *
+     * @param  class-string<Model>|null  $type  only accounts of this model
+     */
+    public function knownAccount(int|string $deviceId, ?string $type = null): ?Device
+    {
+        $device = $this->knownAccountsQuery($type)->with('authenticatable')->find($deviceId);
+
+        return $device?->authenticatable !== null ? $device : null;
+    }
+
+    /**
+     * Stop offering the account on this browser. The device and its history
+     * are kept; signing in again brings the account back.
+     */
+    public function forgetKnownAccount(int|string $deviceId): bool
+    {
+        return $this->knownAccountsQuery(null)
+            ->whereKey($deviceId)
+            ->update(['forgotten_at' => now()]) > 0;
+    }
+
+    /**
+     * Known accounts are only ever looked up by this browser's own device
+     * cookie, so one browser can never list or forget another's.
+     *
+     * @param  class-string<Model>|null  $type
+     * @return Builder<Device>
+     */
+    private function knownAccountsQuery(?string $type): Builder
+    {
+        $deviceToken = $this->deviceToken($this->request(), issue: false);
+
+        return Device::query()
+            ->when($deviceToken === null, fn (Builder $query) => $query->whereRaw('1 = 0'))
+            ->where('device_token_hash', hash('sha256', (string) $deviceToken))
+            ->whereNull('forgotten_at')
+            ->whereNotNull('verified_at')
+            ->when($type !== null, fn (Builder $query) => $query->where('authenticatable_type', (new $type)->getMorphClass()));
     }
 
     /**
@@ -405,6 +473,7 @@ class Tracker
 
         $device->forceFill([
             'signed_out_at' => now(),
+            'forgotten_at' => now(),
             'remember_token_hash' => null,
             'session_id' => null,
         ])->save();

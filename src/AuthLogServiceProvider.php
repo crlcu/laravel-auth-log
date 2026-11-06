@@ -7,6 +7,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Crlcu\AuthLog\Guard\TrackedSessionGuard;
+use Crlcu\AuthLog\KnownAccounts\Picker;
 use Crlcu\AuthLog\Listeners\RecordAuthEvents;
 use Crlcu\AuthLog\Location\LocationResolver;
 
@@ -17,6 +18,7 @@ class AuthLogServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/auth-log.php', 'auth-log');
 
         $this->app->scoped(Tracker::class);
+        $this->app->scoped(Picker::class);
         $this->app->bind(LocationResolver::class, fn (Application $app) => $app->make(config('auth-log.location_resolver')));
     }
 
